@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jarvis — the AI agent for your terminal</title>
+  <meta name="description" content="Jarvis is an open-source AI agent for your terminal. Free models built in, no sign-up, no ads. It remembers you, learns from every task, checks the web, and follows you to your phone." />
+  <meta name="theme-color" content="#0A1128" />
+  <meta property="og:title" content="Jarvis — the AI agent for your terminal" />
+  <meta property="og:description" content="Free models built in. Remembers you, learns from every task, works from your phone." />
+  <meta property="og:image" content="assets/jarvis-logo.png" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,200..900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+
+  <!-- Icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+      <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+      <symbol id="i-diff" viewBox="0 0 24 24"><path d="M12 3v14"/><path d="M5 10h14"/><path d="M5 21h14"/></symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/></symbol>
+      <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></symbol>
+      <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
+      <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol>
+      <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+      <symbol id="i-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path d="M11.52 2.3a.53.53 0 0 1 .95 0l2.31 4.68a2.12 2.12 0 0 0 1.6 1.16l5.16.76a.53.53 0 0 1 .3.9l-3.74 3.64a2.12 2.12 0 0 0-.61 1.88l.88 5.14a.53.53 0 0 1-.77.56l-4.62-2.43a2.12 2.12 0 0 0-1.97 0L6.4 21.01a.53.53 0 0 1-.77-.56l.88-5.13a2.12 2.12 0 0 0-.61-1.88L2.16 9.8a.53.53 0 0 1 .29-.9l5.17-.76a2.12 2.12 0 0 0 1.6-1.16z"/></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="Jarvis home">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 8.5V5" class="mark-stem" />
+          <circle cx="16" cy="3.6" r="1.9" class="mark-dot" />
+          <rect x="3.5" y="9" width="25" height="17" rx="8.5" class="mark-head" />
+          <rect x="6.5" y="12.5" width="19" height="10" rx="5" class="mark-visor" />
+          <g class="mark-eyes"><circle cx="12.4" cy="17.5" r="2.1" /><circle cx="19.6" cy="17.5" r="2.1" /></g>
+        </svg>
+        <span>Jarvis</span>
+      </a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#free">Free models</a>
+        <a href="#why">Why Jarvis</a>
+        <a href="#models">Providers</a>
+        <a href="#compare">Compare</a>
+        <a href="#install">Install</a>
+      </nav>
+      <div class="nav-end">
+        <a class="nav-gh" href="https://github.com/PrajsRamteke/harness-agent" target="_blank" rel="noopener">
+          <svg class="i"><use href="#i-github" /></svg><span>GitHub</span>
+        </a>
+        <a class="btn btn-sm btn-primary" href="#install">Install</a>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="sheet">
+          <svg class="i"><use href="#i-menu" /></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="sheet" id="sheet" hidden>
+    <a href="#free">Free models</a>
+    <a href="#why">Why Jarvis</a>
+    <a href="#models">Providers</a>
+    <a href="#compare">Compare</a>
+    <a href="#install">Install</a>
+    <a href="https://github.com/PrajsRamteke/harness-agent" target="_blank" rel="noopener">GitHub</a>
+  </div>
+
+  <main id="main">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero" id="top">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="wrap hero-head">
+        <h1 class="hero-title">
+          <span class="ln"><span>The AI agent that</span></span>
+          <span class="ln"><span>works where your</span></span>
+          <span class="ln"><span>code lives.</span></span>
+        </h1>
+        <div class="hero-aside">
+          <p class="hero-sub">Jarvis reads your project, runs commands, edits files and checks its own work, right in your terminal. It remembers how you like things done, learns from every task, and runs on free models the moment you install it.</p>
+          <div class="hero-cta">
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#install">Install Jarvis</a>
+              <a class="btn btn-ghost" href="https://github.com/PrajsRamteke/harness-agent" target="_blank" rel="noopener">
+                <svg class="i"><use href="#i-github" /></svg>Read the source
+              </a>
+            </div>
+            <ul class="hero-facts">
+              <li><svg class="i"><use href="#i-check" /></svg>Free models built in</li>
+              <li><svg class="i"><use href="#i-check" /></svg>Open source</li>
+              <li><svg class="i"><use href="#i-check" /></svg>macOS, Linux and Windows</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-stage">
+        <div class="term term-hero" id="hero-term" aria-label="Example Jarvis session fixing a failing checkout test" role="img">
+          <div class="term-bar">
+            <span class="lights"><i></i><i></i><i></i></span>
+            <span class="term-title">~/work/storefront — jarvis</span>
+            <span class="term-badge">Free model</span>
+          </div>
+          <div class="term-body">
+            <div class="tw-welcome">
+              <div class="tw-row"><span class="c-accent">◉ Jarvis</span> <span class="c-dim">0.2.5</span></div>
+              <div class="tw-grid">
+                <span class="c-dim">model</span><span>MiMo V2.5 Free</span>
+                <span class="c-dim">provider</span><span>Harness Agent</span>
+                <span class="c-dim">project</span><span>~/work/storefront</span>
+                <span class="c-dim">branch</span><span>main</span>
+              </div>
+            </div>
+            <div class="tw-log" id="hero-log" aria-hidden="true"></div>
+          </div>
+          <div class="term-foot">
+            <span class="c-accent">coding</span>
+            <span>MiMo V2.5 Free</span>
+            <span class="c-dim">context 9%</span>
+            <span class="c-dim">cost $0.00</span>
+          </div>
+        </div>
+        <div class="hero-reflection" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- ===================== FREE ===================== -->
+    <section class="free" id="free">
+      <div class="free-pin">
+        <div class="wrap free-grid">
+          <div class="free-copy">
+            <div class="zero" aria-hidden="true"><span class="zero-sym">$</span><span class="zero-num">0</span></div>
+            <h2 class="h2" data-split>Free models, ready on first run.</h2>
+            <p class="lede">Jarvis comes with Harness Agent, a free model provider wired in from the start. There’s no key to paste, no account to make, and no ads in your terminal. Install it, type <code>jarvis</code>, and start working.</p>
+            <ul class="nos">
+              <li><svg class="i"><use href="#i-x" /></svg>No API key</li>
+              <li><svg class="i"><use href="#i-x" /></svg>No sign-up</li>
+              <li><svg class="i"><use href="#i-x" /></svg>No credit card</li>
+              <li><svg class="i"><use href="#i-x" /></svg>No ads, ever</li>
+            </ul>
+            <p class="free-more">Want a bigger model later? Sign in with a Claude or ChatGPT subscription, or paste any key. The free models stay in your list.</p>
+          </div>
+
+          <div class="picker" aria-label="Model picker showing free models" role="img">
+            <div class="picker-head">
+              <span class="picker-cmd">/model</span>
+              <span class="picker-search"><span class="c-dim">search</span> free<span class="caret"></span></span>
+            </div>
+            <div class="picker-group">
+              <div class="pg-title"><span class="mono-tile">H</span>Harness Agent <span class="c-dim">no key needed</span></div>
+              <div class="pg-row is-current"><span class="dot"></span>MiMo V2.5 Free<span class="tags"><b class="tag tag-free">Free</b><b class="tag tag-use">In use</b></span></div>
+              <div class="pg-row"><span class="dot"></span>Nemotron 3 Ultra Free<span class="tags"><b class="tag tag-free">Free</b></span></div>
+              <div class="pg-row"><span class="dot"></span>Big Pickle<span class="tags"><b class="tag tag-free">Free</b></span></div>
+              <div class="pg-row"><span class="dot"></span>Nemotron 3.5 Lightning Free<span class="tags"><b class="tag tag-free">Free</b></span></div>
+            </div>
+            <div class="picker-group">
+              <div class="pg-title"><span class="mono-tile">O</span>OpenRouter <span class="c-dim">free tier, found live</span></div>
+              <div class="pg-row"><span class="dot"></span>openrouter/free<span class="tags"><b class="tag tag-free">Free</b></span></div>
+              <div class="pg-row pg-more">Every $0 model OpenRouter serves today</div>
+            </div>
+            <p class="picker-note">Free line-ups change often, so Jarvis discovers them live instead of hard-coding a list.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== WHY (sticky story) ===================== -->
+    <section class="why" id="why">
+      <div class="wrap">
+        <header class="sec-head">
+          <h2 class="h2" data-split>What Jarvis does that most agents don’t.</h2>
+          <p class="lede">Five things that change how a day with an AI agent feels.</p>
+        </header>
+
+        <div class="story">
+          <div class="story-text">
+
+            <article class="chapter" data-ch="0">
+              <span class="ch-index">1 / 5</span>
+              <h3 class="h3">It remembers you.</h3>
+              <p>Tell Jarvis your name, your stack, how you like commits written. It saves those facts and brings them into every new session, so you stop repeating yourself.</p>
+              <p class="ch-note">Every fact is a plain line you can read, edit or delete with <code>/memory</code>.</p>
+
+              <div class="panel panel-memory" data-panel="0">
+                <div class="panel-bar"><span>Memory</span><span class="c-dim mem-count">5 facts</span></div>
+                <ul class="mem-list">
+                  <li><span class="mem-id">#1</span>Name is Sam, works from Pune</li>
+                  <li><span class="mem-id">#2</span>Prefers pnpm over npm</li>
+                  <li><span class="mem-id">#3</span>Commit messages in present tense, under 60 chars</li>
+                  <li><span class="mem-id">#4</span>Main project is a Next.js storefront</li>
+                  <li><span class="mem-id">#5</span>Likes short answers with code first</li>
+                  <li class="mem-new"><span class="mem-id">#6</span><span class="mem-typed" data-text="Run the tests before suggesting a commit"></span><span class="saved">Saved</span></li>
+                </ul>
+                <div class="panel-foot c-dim">Loaded into every session. Stored on your machine.</div>
+              </div>
+            </article>
+
+            <article class="chapter" data-ch="1">
+              <span class="ch-index">2 / 5</span>
+              <h3 class="h3">It learns from its own work.</h3>
+              <p>When Jarvis solves something tricky, it writes down a short lesson: the kind of task, and what actually worked. Next time a similar task shows up, the lesson is already in front of it, so it skips the dead ends.</p>
+              <p class="ch-note">Lessons that keep proving useful are kept. The rest are pruned.</p>
+
+              <div class="panel panel-lessons" data-panel="1">
+                <div class="panel-bar"><span>Lessons</span><span class="c-dim">recalled for this task</span></div>
+                <div class="lesson">
+                  <div class="lesson-task">Lockfile conflict during rebase</div>
+                  <div class="lesson-body">Regenerate the lockfile with the package manager instead of merging it by hand.</div>
+                  <div class="lesson-meta"><span class="ltag">git</span><span class="ltag">pnpm</span><span class="hits">used <b data-count="7">0</b> times</span></div>
+                </div>
+                <div class="lesson">
+                  <div class="lesson-task">Flaky end-to-end test on CI</div>
+                  <div class="lesson-body">Wait for the network to go idle instead of a fixed timeout.</div>
+                  <div class="lesson-meta"><span class="ltag">playwright</span><span class="hits">used <b data-count="4">0</b> times</span></div>
+                </div>
+                <div class="lesson lesson-new">
+                  <div class="lesson-task">Cart total ignores quantity</div>
+                  <div class="lesson-body">Check quantity handling in <code>cart.py</code> first; totals are summed there.</div>
+                  <div class="lesson-meta"><span class="ltag">pricing</span><span class="hits new-chip">New lesson</span></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="chapter" data-ch="2">
+              <span class="ch-index">3 / 5</span>
+              <h3 class="h3">It checks the web, then checks again.</h3>
+              <p>Jarvis can search, open pages and read docs. For questions of fact it runs a verified search: it reads several independent sources, compares what they claim, and tells you how well they agree.</p>
+              <p class="ch-note">A guard removes sentences that cite sources Jarvis never opened.</p>
+
+              <div class="panel panel-web" data-panel="2">
+                <div class="panel-bar"><span>verified_search</span><span class="c-dim">“postgres 17 end of life date”</span></div>
+                <ul class="src-list">
+                  <li><span class="src-dom">postgresql.org</span><span class="src-state">agrees</span></li>
+                  <li><span class="src-dom">endoflife.date</span><span class="src-state">agrees</span></li>
+                  <li><span class="src-dom">wikipedia.org</span><span class="src-state">agrees</span></li>
+                  <li><span class="src-dom">github.com</span><span class="src-state">agrees</span></li>
+                  <li><span class="src-dom">stackoverflow.com</span><span class="src-state is-off">no claim</span></li>
+                  <li><span class="src-dom">dev.to</span><span class="src-state">agrees</span></li>
+                </ul>
+                <div class="agree">
+                  <div class="agree-top"><span>Agreement</span><span><b>5</b> of 6 sources</span></div>
+                  <div class="agree-bar"><span></span></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="chapter" data-ch="3">
+              <span class="ch-index">4 / 5</span>
+              <h3 class="h3">Leave your desk. Keep the session.</h3>
+              <p>Type <code>/web</code> and scan the QR code. The session you’re in opens on your phone or any browser, live. Approve commands, review every changed file, attach photos and PDFs.</p>
+              <p class="ch-note">Away from your Wi-Fi? <code>/web anywhere</code> opens a private link through a tunnel.</p>
+
+              <div class="panel panel-remote" data-panel="3">
+                <div class="remote">
+                  <div class="qr-card">
+                    <div class="qr" aria-hidden="true"><span class="qr-scan"></span></div>
+                    <div class="qr-cap"><span class="live-dot"></span>Scan to open this session</div>
+                  </div>
+                  <div class="phone">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                      <div class="ph-head">storefront <span class="c-dim">· live</span></div>
+                      <div class="ph-msg ph-you">Ship the cart fix and open a PR</div>
+                      <div class="ph-msg ph-ai">Tests pass. Ready to push.</div>
+                      <div class="ph-approve">
+                        <div class="ph-q">Run <code>git push -u origin fix/cart</code>?</div>
+                        <div class="ph-btns"><span class="ph-yes">Approve</span><span class="ph-no">Deny</span></div>
+                      </div>
+                      <div class="ph-changes"><span>2 files changed</span><span class="c-ok">+14</span><span class="c-bad">−3</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="chapter" data-ch="4">
+              <span class="ch-index">5 / 5</span>
+              <h3 class="h3">It can use your Mac, too.</h3>
+              <p>Beyond code, Jarvis can open apps, click buttons, type, run AppleScript and Shortcuts, take screenshots, read text from images and speak out loud.</p>
+              <p class="ch-note">macOS asks for your permission first, and you approve risky steps.</p>
+
+              <div class="panel panel-mac" data-panel="4">
+                <div class="panel-bar"><span>Your Mac</span><span class="c-dim">“save today’s invoices to Finance”</span></div>
+                <ol class="mac-log">
+                  <li><span class="tool">launch_app</span><span>Mail</span></li>
+                  <li><span class="tool">read_ui</span><span>Inbox, 4 invoice emails</span></li>
+                  <li><span class="tool">click_element</span><span>Save attachment</span></li>
+                  <li><span class="tool">applescript</span><span>Move 4 PDFs to ~/Finance</span></li>
+                  <li><span class="tool">read_image_text</span><span>Totals read from each PDF</span></li>
+                  <li><span class="tool">notify</span><span>“4 invoices saved”</span></li>
+                </ol>
+              </div>
+            </article>
+
+          </div>
+
+          <div class="story-stage" aria-hidden="true">
+            <div class="stage-frame">
+              <div class="stage-panels"></div>
+              <div class="stage-rail"><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== MODELS ===================== -->
+    <section class="models" id="models">
+      <div class="wrap">
+        <header class="sec-head sec-head-split">
+          <h2 class="h2" data-split>Any model you like. Switch with one command.</h2>
+          <p class="lede">Use a subscription you already pay for, a key you already have, or nothing at all. Jarvis lists every provider with prices, context size and whether a model can see images.</p>
+        </header>
+      </div>
+
+      <div class="marquee" aria-hidden="true">
+        <div class="mq-row" data-dir="-1">
+          <div class="mq-track">
+            <span>Anthropic</span><span>OpenAI</span><span>OpenRouter</span><span>OpenCode</span><span>DeepSeek</span><span>Google</span><span>Groq</span><span>Mistral</span><span>xAI</span><span>Moonshot</span>
+          </div>
+        </div>
+        <div class="mq-row mq-row-alt" data-dir="1">
+          <div class="mq-track">
+            <span>Cerebras</span><span>Together AI</span><span>Fireworks</span><span>Hugging Face</span><span>MiniMax</span><span>Z.ai</span><span>Alibaba</span><span>Nvidia</span><span>Perplexity</span><span>Cohere</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <div class="ways">
+          <div class="way">
+            <h3>Subscriptions</h3>
+            <p>Sign in with Claude Pro or Max, or with ChatGPT. Your plan covers the usage.</p>
+            <code>/provider</code>
+          </div>
+          <div class="way">
+            <h3>Your own keys</h3>
+            <p>Anthropic, OpenRouter, OpenCode Go and Zen, plus around 200 providers listed on models.dev.</p>
+            <code>export GROQ_API_KEY=…</code>
+          </div>
+          <div class="way way-free">
+            <h3>Free</h3>
+            <p>Harness Agent works with no setup. Free OpenRouter models are found live and tagged.</p>
+            <code>/model</code>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><b data-count="200" data-suffix="+">0</b><span>providers in the catalog</span></div>
+          <div class="stat"><b data-count="64">0</b><span>tool calls in parallel</span></div>
+          <div class="stat"><b data-count="22">0</b><span>built-in themes</span></div>
+          <div class="stat"><b>$0</b><span>to start</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SETUP (converge) ===================== -->
+    <section class="setup" id="setup">
+      <div class="setup-pin">
+        <div class="wrap">
+          <header class="sec-head">
+            <h2 class="h2" data-split>Brings the setup you already have.</h2>
+            <p class="lede">Jarvis reads agents, skills, MCP servers and commands from the folders other AI tools use. Nothing to copy, nothing to convert.</p>
+          </header>
+
+          <div class="flow">
+            <ul class="sources">
+              <li>.claude</li><li>.cursor</li><li>.codex</li><li>.gemini</li><li>.opencode</li><li>.agents</li><li>.kiro</li><li>.harness</li>
+            </ul>
+
+            <svg class="wires" viewBox="0 0 600 400" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="wire-g" x1="0" x2="1">
+                  <stop offset="0" stop-color="#6CB6FF" stop-opacity=".1" />
+                  <stop offset="1" stop-color="#6CB6FF" stop-opacity=".9" />
+                </linearGradient>
+              </defs>
+              <g class="wires-in">
+                <path d="M0 25 C 180 25, 180 200, 300 200" /><path d="M0 75 C 180 75, 180 200, 300 200" />
+                <path d="M0 125 C 180 125, 180 200, 300 200" /><path d="M0 175 C 180 175, 180 200, 300 200" />
+                <path d="M0 225 C 180 225, 180 200, 300 200" /><path d="M0 275 C 180 275, 180 200, 300 200" />
+                <path d="M0 325 C 180 325, 180 200, 300 200" /><path d="M0 375 C 180 375, 180 200, 300 200" />
+              </g>
+              <g class="wires-out">
+                <path d="M300 200 C 420 200, 420 50, 600 50" /><path d="M300 200 C 420 200, 420 150, 600 150" />
+                <path d="M300 200 C 420 200, 420 250, 600 250" /><path d="M300 200 C 420 200, 420 350, 600 350" />
+              </g>
+            </svg>
+
+            <div class="core">
+              <svg class="mark mark-lg" viewBox="0 0 32 32" aria-hidden="true">
+                <path d="M16 8.5V5" class="mark-stem" />
+                <circle cx="16" cy="3.6" r="1.9" class="mark-dot" />
+                <rect x="3.5" y="9" width="25" height="17" rx="8.5" class="mark-head" />
+                <rect x="6.5" y="12.5" width="19" height="10" rx="5" class="mark-visor" />
+                <g class="mark-eyes"><circle cx="12.4" cy="17.5" r="2.1" /><circle cx="19.6" cy="17.5" r="2.1" /></g>
+              </svg>
+              <span>Jarvis</span>
+            </div>
+
+            <ul class="outputs">
+              <li><b>Agents</b><span>Personas you switch with Tab</span></li>
+              <li><b>Skills</b><span>Loaded on their own when a task matches</span></li>
+              <li><b>MCP servers</b><span>Add from a link, sign in with one click</span></li>
+              <li><b>Commands</b><span>Your prompt templates as slash commands</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== COMPARE (light) ===================== -->
+    <section class="compare" id="compare">
+      <div class="compare-sheet">
+        <div class="wrap">
+          <header class="sec-head">
+            <h2 class="h2" data-split>How Jarvis compares.</h2>
+            <p class="lede">Side by side with the typical AI coding agent.</p>
+          </header>
+
+          <div class="table" role="table" aria-label="Jarvis compared with a typical AI coding agent">
+            <div class="tr th" role="row">
+              <span role="columnheader"></span>
+              <span role="columnheader" class="th-jarvis">Jarvis</span>
+              <span role="columnheader">Typical agent</span>
+            </div>
+            <div class="tr" role="row">
+              <span role="rowheader">Cost to start</span>
+              <span role="cell" class="yes"><svg class="i"><use href="#i-check" /></svg>Free models built in</span>
+              <span role="cell" class="no">A paid plan or API key</span>
+            </div>
+            <div class="tr" role="row">
+              <span role="rowheader">Account needed</span>
+              <span role="cell" class="yes"><svg class="i"><use href="#i-check" /></svg>None</span>
+              <span role="cell" class="no">Sign-up first</span>
+            </div>
+            <div class="tr" role="row">
+              <span role="rowheader">Memory</span>
+              <span role="cell" class="yes"><svg class="i"><use href="#i-check" /></svg>Saves facts about you across sessions</span>
+              <span role="cell" class="no">You keep a notes file by hand</span>
+            </div>
+            <div class="tr" role="row">
+              <span role="rowheader">Learning</span>
+              <span role="cell" class="yes"><svg class="i"><use href="#i-check" /></svg>Writes lessons from solved tasks</span>
+              <span role="cell" class="no">No record of what worked</span>
+            </div>
+            <div class="tr" role="row">
+              <span role="rowheader">Models</span>
+              <span role="cell" class="yes"><svg class="i"><use href="#i-check" /></svg>Around 200 providers, plus free ones</span>
+              <span role="cell" class="no">One vendor or a fixed list</span>
+            </div>
+            <div class="tr" role="row">
+              <span role="rowheader">Facts from the web</span>
+              <span role="cell" class="yes"><svg class="i"><use href="#i-check" /></svg>Cross-checks several sources</span>
+              <span role="cell" class="no">A single search, if any</span>
+            </div>
+            <div class="tr" role="row">
+              <span role="rowheader">Away from your desk</span>
+              <span role="cell" class="yes"><svg class="i"><use href="#i-check" /></svg>Same session on your phone</span>
+              <span role="cell" class="no">Desk only</span>
+            </div>
+            <div class="tr" role="row">
+              <span role="rowheader">Beyond the terminal</span>
+              <span role="cell" class="yes"><svg class="i"><use href="#i-check" /></svg>Controls macOS apps</span>
+              <span role="cell" class="no">Files and shell only</span>
+            </div>
+            <div class="tr" role="row">
+              <span role="rowheader">Existing setup</span>
+              <span role="cell" class="yes"><svg class="i"><use href="#i-check" /></svg>Reads Claude, Cursor, Codex and Gemini folders</span>
+              <span role="cell" class="no">Its own config format</span>
+            </div>
+            <div class="tr" role="row">
+              <span role="rowheader">Ads and source</span>
+              <span role="cell" class="yes"><svg class="i"><use href="#i-check" /></svg>No ads, open source</span>
+              <span role="cell" class="no">Often closed source</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== DETAILS ===================== -->
+    <section class="details" id="details">
+      <div class="wrap">
+        <header class="sec-head">
+          <h2 class="h2" data-split>And the small things that add up.</h2>
+        </header>
+
+        <div class="feature-pair">
+          <article class="tile tile-pets">
+            <div class="pen" id="pen">
+              <canvas id="pet-canvas" width="480" height="200" aria-label="An animated pixel pet walking in its pen" role="img"></canvas>
+              <div class="pen-floor"></div>
+            </div>
+            <div class="tile-copy">
+              <h3 class="h3">A pet that ships with you.</h3>
+              <p>Adopt a cat, dog, bunny or dragon. It naps while you’re idle, paces while Jarvis works, and levels up as you ship. The dragon starts as an egg and hatches after ten turns.</p>
+              <div class="species" role="group" aria-label="Choose a pet">
+                <button type="button" class="chip is-on" data-species="cat">Cat</button>
+                <button type="button" class="chip" data-species="dog">Dog</button>
+                <button type="button" class="chip" data-species="bunny">Bunny</button>
+                <button type="button" class="chip" data-species="dragon">Dragon</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="tile tile-themes">
+            <div class="theme-view" id="theme-view">
+              <div class="tv-line"><span class="tv-accent">◉ Jarvis</span> <span class="tv-mute">theme</span> <span class="tv-name" id="tv-name">tokyonight</span></div>
+              <div class="tv-line"><span class="tv-ok">✓</span> <span class="tv-mute">run_bash</span> pytest -q <span class="tv-ok">12 passed</span></div>
+              <div class="tv-line"><span class="tv-accent2">●</span> <span class="tv-mute">edit_file</span> shop/cart.py</div>
+            </div>
+            <div class="swatches" id="swatches" role="group" aria-label="Preview a theme"></div>
+            <div class="tile-copy">
+              <h3 class="h3">22 themes, previewed live.</h3>
+              <p>Tokyo Night, Catppuccin, Nord, Dracula, Gruvbox and more. Pick one with <code>/theme</code> and the whole transcript restyles in place.</p>
+            </div>
+          </article>
+        </div>
+
+        <ul class="spec">
+          <li><svg class="i"><use href="#i-clock" /></svg><div><h4>Background jobs</h4><p>Long builds run in the background, and Jarvis picks the work back up when they finish.</p></div></li>
+          <li><svg class="i"><use href="#i-repeat" /></svg><div><h4>Loops</h4><p><code>/loop 5m</code> repeats a task on a timer, or lets Jarvis pace itself.</p></div></li>
+          <li><svg class="i"><use href="#i-zap" /></svg><div><h4>Parallel tools</h4><p>Reads and searches run up to 64 at a time.</p></div></li>
+          <li><svg class="i"><use href="#i-layers" /></svg><div><h4>Lean context</h4><p>Each turn sends only the tools it needs, so your tokens go further.</p></div></li>
+          <li><svg class="i"><use href="#i-diff" /></svg><div><h4>Every change tracked</h4><p>A live list of changed files with diffs and a patch you can apply.</p></div></li>
+          <li><svg class="i"><use href="#i-sparkles" /></svg><div><h4>Prompt polish</h4><p>One click fixes spelling and grammar before you send.</p></div></li>
+          <li><svg class="i"><use href="#i-database" /></svg><div><h4>Local history</h4><p>Every session is saved on your disk. Resume any of them.</p></div></li>
+          <li><svg class="i"><use href="#i-gauge" /></svg><div><h4>Cost in view</h4><p>Tokens, context and spend sit in the footer, always.</p></div></li>
+          <li><svg class="i"><use href="#i-image" /></svg><div><h4>Eyes on screen</h4><p>Screenshots of the screen, a window or a web page, with text read from images.</p></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== INSTALL ===================== -->
+    <section class="install" id="install">
+      <div class="wrap">
+        <header class="sec-head">
+          <h2 class="h2" data-split>Three steps to your first task.</h2>
+          <p class="lede">You need Python 3.10 or newer. Jarvis installs into its own environment and adds one command: <code>jarvis</code>.</p>
+        </header>
+
+        <div class="os-tabs" role="tablist" aria-label="Operating system">
+          <button role="tab" id="tab-unix" aria-selected="true" aria-controls="steps-unix" class="os-tab is-on">macOS and Linux</button>
+          <button role="tab" id="tab-win" aria-selected="false" aria-controls="steps-win" class="os-tab" tabindex="-1">Windows</button>
+          <span class="os-pill" aria-hidden="true"></span>
+        </div>
+
+        <ol class="steps" id="steps-unix" role="tabpanel" aria-labelledby="tab-unix">
+          <li class="step">
+            <span class="step-n">1</span>
+            <div class="step-body">
+              <h3>Get Python</h3>
+              <p>Skip this if <code>python3 --version</code> already shows 3.10 or newer.</p>
+              <div class="cmd"><code><span class="ps">$</span>brew install python@3.11</code><button class="copy" type="button" data-copy="brew install python@3.11" aria-label="Copy command"><svg class="i"><use href="#i-copy" /></svg></button></div>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-n">2</span>
+            <div class="step-body">
+              <h3>Run the installer</h3>
+              <p>Run it again any time to update.</p>
+              <div class="cmd"><code><span class="ps">$</span>curl -fsSL https://raw.githubusercontent.com/PrajsRamteke/harness-agent/main/scripts/install | bash</code><button class="copy" type="button" data-copy="curl -fsSL https://raw.githubusercontent.com/PrajsRamteke/harness-agent/main/scripts/install | bash" aria-label="Copy command"><svg class="i"><use href="#i-copy" /></svg></button></div>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-n">3</span>
+            <div class="step-body">
+              <h3>Open a project and start</h3>
+              <p>Open a new terminal in any project folder.</p>
+              <div class="cmd"><code><span class="ps">$</span>jarvis</code><button class="copy" type="button" data-copy="jarvis" aria-label="Copy command"><svg class="i"><use href="#i-copy" /></svg></button></div>
+            </div>
+          </li>
+        </ol>
+
+        <ol class="steps" id="steps-win" role="tabpanel" aria-labelledby="tab-win" hidden>
+          <li class="step">
+            <span class="step-n">1</span>
+            <div class="step-body">
+              <h3>Get Python and Git</h3>
+              <p>Skip this if you already have both. Open a new terminal afterwards.</p>
+              <div class="cmd"><code><span class="ps">&gt;</span>winget install -e --id Python.Python.3.12; winget install -e --id Git.Git</code><button class="copy" type="button" data-copy="winget install -e --id Python.Python.3.12; winget install -e --id Git.Git" aria-label="Copy command"><svg class="i"><use href="#i-copy" /></svg></button></div>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-n">2</span>
+            <div class="step-body">
+              <h3>Run the installer</h3>
+              <p>Paste into PowerShell or Command Prompt. No admin rights needed.</p>
+              <div class="cmd"><code><span class="ps">&gt;</span>powershell -ExecutionPolicy ByPass -c "irm https://raw.githubusercontent.com/PrajsRamteke/harness-agent/main/scripts/install.ps1 | iex"</code><button class="copy" type="button" data-copy='powershell -ExecutionPolicy ByPass -c "irm https://raw.githubusercontent.com/PrajsRamteke/harness-agent/main/scripts/install.ps1 | iex"' aria-label="Copy command"><svg class="i"><use href="#i-copy" /></svg></button></div>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-n">3</span>
+            <div class="step-body">
+              <h3>Open a project and start</h3>
+              <p>Open a new terminal in any project folder.</p>
+              <div class="cmd"><code><span class="ps">&gt;</span>jarvis</code><button class="copy" type="button" data-copy="jarvis" aria-label="Copy command"><svg class="i"><use href="#i-copy" /></svg></button></div>
+            </div>
+          </li>
+        </ol>
+
+        <p class="install-note"><svg class="i"><use href="#i-shield" /></svg><span>Jarvis starts on a free model right away. Sign in or add a key any time with <code>/provider</code>.</span></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="foot">
+    <div class="wrap foot-top">
+      <p class="foot-line">Open your terminal. Type one word.</p>
+      <div class="foot-actions">
+        <a class="btn btn-primary" href="#install">Install Jarvis</a>
+        <a class="btn btn-ghost" href="https://github.com/PrajsRamteke/harness-agent" target="_blank" rel="noopener"><svg class="i"><use href="#i-star" /></svg>Star on GitHub</a>
+      </div>
+    </div>
+    <div class="wordmark" aria-hidden="true"><span>Jarvis</span></div>
+    <div class="wrap foot-bottom">
+      <a class="foot-credit" href="https://github.com/PrajsRamteke">Built by <b>Prajwal Ramteke</b></a>
+      <nav aria-label="Project links">
+        <a href="https://github.com/PrajsRamteke/harness-agent" target="_blank" rel="noopener">Source</a>
+        <a href="https://github.com/PrajsRamteke/harness-agent/issues" target="_blank" rel="noopener">Issues</a>
+        <a href="https://github.com/PrajsRamteke/harness-agent/discussions" target="_blank" rel="noopener">Discussions</a>
+      </nav>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="js/pets.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
