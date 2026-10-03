@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jarvis — the AI agent for your terminal</title>
   <meta name="description" content="Jarvis is an open-source AI agent for your terminal. Free models built in, no sign-up, no ads. It remembers you, learns from every task, checks the web, and follows you to your phone." />
-  <meta name="theme-color" content="#0A1128" />
+  <meta name="theme-color" content="#0B0B0C" id="meta-theme-color" />
+  <meta name="color-scheme" content="dark light" />
   <meta property="og:title" content="Jarvis — the AI agent for your terminal" />
   <meta property="og:description" content="Free models built in. Remembers you, learns from every task, works from your phone." />
   <meta property="og:image" content="assets/jarvis-logo.png" />
@@ -14,6 +15,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:wdth,wght@75..125,200..900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
+  <script>
+    // set theme before first paint — avoids a flash of the wrong palette
+    (function () {
+      var t;
+      try { t = localStorage.getItem("jarvis-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
@@ -36,6 +48,8 @@
       <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
       <symbol id="i-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></symbol>
       <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8Z"/></symbol>
       <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
       <symbol id="i-star" viewBox="0 0 24 24"><path d="M11.52 2.3a.53.53 0 0 1 .95 0l2.31 4.68a2.12 2.12 0 0 0 1.6 1.16l5.16.76a.53.53 0 0 1 .3.9l-3.74 3.64a2.12 2.12 0 0 0-.61 1.88l.88 5.14a.53.53 0 0 1-.77.56l-4.62-2.43a2.12 2.12 0 0 0-1.97 0L6.4 21.01a.53.53 0 0 1-.77-.56l.88-5.13a2.12 2.12 0 0 0-.61-1.88L2.16 9.8a.53.53 0 0 1 .29-.9l5.17-.76a2.12 2.12 0 0 0 1.6-1.16z"/></symbol>
     </defs>
@@ -69,6 +83,14 @@
           <svg class="i"><use href="#i-github" /></svg><span>GitHub</span>
         </a>
         <a class="btn btn-sm btn-primary" href="#install">Install</a>
+        <button class="theme-btn" id="theme-toggle" type="button" aria-live="polite">
+          <svg class="i theme-icon-moon" aria-hidden="true"><use href="#i-moon" /></svg>
+          <svg class="i theme-icon-sun" aria-hidden="true"><use href="#i-sun" /></svg>
+          <span class="theme-btn-label">
+            <span class="theme-label-light">Light</span><span class="theme-label-dark">Dark</span>
+          </span>
+          <span class="sr-only" id="theme-toggle-label">Toggle colour theme</span>
+        </button>
         <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="sheet">
           <svg class="i"><use href="#i-menu" /></svg>
         </button>
@@ -390,8 +412,8 @@
             <svg class="wires" viewBox="0 0 600 400" preserveAspectRatio="none" aria-hidden="true">
               <defs>
                 <linearGradient id="wire-g" x1="0" x2="1">
-                  <stop offset="0" stop-color="#6CB6FF" stop-opacity=".1" />
-                  <stop offset="1" stop-color="#6CB6FF" stop-opacity=".9" />
+                  <stop offset="0" stop-color="currentColor" stop-opacity=".1" />
+                  <stop offset="1" stop-color="currentColor" stop-opacity=".9" />
                 </linearGradient>
               </defs>
               <g class="wires-in">

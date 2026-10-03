@@ -23,6 +23,42 @@
   }
 
   /* ------------------------------------------------------------------
+     Colour theme — dark default, opt-in light. The head script sets
+     data-theme before first paint; this wires up the toggle and keeps
+     the meta theme-color in sync with the browser chrome.
+     Placed after Lenis init so setTheme can safely use lenis.resize().
+     ------------------------------------------------------------------ */
+  const themeBtn = $("#theme-toggle");
+  const metaThemeColor = $("#meta-theme-color");
+  const THEME_COLORS = { dark: "#0B0B0C", light: "#F4F2EE" };
+
+  function setTheme(next, persist) {
+    document.documentElement.setAttribute("data-theme", next);
+    if (metaThemeColor) metaThemeColor.setAttribute("content", THEME_COLORS[next]);
+    if (persist) { try { localStorage.setItem("jarvis-theme", next); } catch (e) { /* private mode */ } }
+    if (lenis) lenis.resize();
+    if (hasGsap) ScrollTrigger.refresh();
+  }
+
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      const cur = document.documentElement.getAttribute("data-theme") || "dark";
+      setTheme(cur === "dark" ? "light" : "dark", true);
+    });
+    setTheme(document.documentElement.getAttribute("data-theme") || "dark", false);
+  }
+
+  // follow the OS only while the visitor has not made an explicit choice
+  const schemeLight = window.matchMedia("(prefers-color-scheme: light)");
+  if (schemeLight.addEventListener) {
+    schemeLight.addEventListener("change", (e) => {
+      let stored = null;
+      try { stored = localStorage.getItem("jarvis-theme"); } catch (err) { /* ignore */ }
+      if (!stored) setTheme(e.matches ? "light" : "dark", false);
+    });
+  }
+
+  /* ------------------------------------------------------------------
      Nav, mobile sheet, progress, anchors
      ------------------------------------------------------------------ */
   const nav = $("#nav");
